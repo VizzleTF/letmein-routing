@@ -34,14 +34,20 @@ LINKS = {
 QR_LIMIT = 2953
 
 
-def qr_svg(payload: str) -> str:
-    """SVG-код QR без XML-пролога — чтобы вставился внутрь HTML как есть."""
-    svg = subprocess.run(
-        [QRENCODE, "-t", "SVG", "-m", "0", "-l", "M", "-o", "-", payload],
-        check=True, capture_output=True, text=True,
-    ).stdout
-    start = svg.index("<svg")
-    return " ".join(svg[start:].split())
+def qr_png(payload: str, name: str) -> str:
+    """Рисует QR в PNG и возвращает <img> на него.
+
+    Не inline-SVG: диплинк на ~2 КБ даёт QR 40-й версии, в SVG это десятки тысяч
+    прямоугольников — страница распухала до мегабайтов. PNG весит единицы килобайт.
+    """
+    qrdir = OUT / "qr"
+    qrdir.mkdir(exist_ok=True)
+    rel = f"qr/{name.lower().replace('_', '-')}.png"
+    subprocess.run(
+        [QRENCODE, "-t", "PNG", "-s", "4", "-m", "1", "-l", "M", "-o", str(OUT / rel), payload],
+        check=True, capture_output=True,
+    )
+    return f'<img src="{rel}" alt="QR" width="232" height="232" loading="lazy">' 
 
 
 def main() -> int:
@@ -59,7 +65,7 @@ def main() -> int:
                   f"(лимит {QR_LIMIT}). Сократи списки в JSON.", file=sys.stderr)
             return 1
         page = page.replace(f"@@{marker}@@", link)
-        page = page.replace(f"@@QR_{marker}@@", qr_svg(link))
+        page = page.replace(f"@@QR_{marker}@@", qr_png(link, marker))
 
     page = page.replace("@@BUILD_DATE@@", datetime.now(timezone.utc).strftime("%d.%m.%Y"))
 
