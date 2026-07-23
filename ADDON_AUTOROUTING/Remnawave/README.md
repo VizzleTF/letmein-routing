@@ -28,8 +28,18 @@ curl -s -X PATCH "https://<panel>/api/subscription-settings" \
   curl -s -o /dev/null -w '%{http_code}\n' -A 'Happ/1.0' "https://<panel>/api/sub/<shortUuid>"
   ```
 
-- Поле глобальное: разным пользователям разные профили через него не раздать. Второй профиль —
-  только ссылкой или QR.
+- Глобальное поле — одно на всю панель, но **у внешних сквадов есть свои `subscriptionSettings`,
+  и `happRouting` в них перекрывает глобальный**. Так разным людям раздаются разные профили:
+
+  ```bash
+  curl -s -X PATCH "https://<panel>/api/external-squads" \
+    -H "Authorization: Bearer $REMNAWAVE_API_TOKEN" -H 'Content-Type: application/json' \
+    -d "$(jq -n --arg u "<external-squad-uuid>" --arg r "$LINK" \
+          '{uuid:$u, subscriptionSettings:{happRouting:$r, happAnnounce:"LetMeIn"}}')"
+  ```
+
+  Неизвестные ключи внутри `subscriptionSettings` панель молча отбрасывает — опечатка в имени
+  поля выглядит как «не применилось», ошибки не будет.
 - Гео-базы Happ перекачивает, лишь когда `LastUpdated` вырос, и **не чаще раза в неделю**.
   Чаще, чем раз в неделю, обновлять `happRouting` ради баз бессмысленно.
 
@@ -50,6 +60,8 @@ API_TOKEN=<remnawave api token>
 SETTINGS_UUID=<uuid из GET /api/subscription-settings>
 HEALTH_SHORT_UUID=<shortUuid любого активного пользователя>
 PROFILE=DEFAULT           # DEFAULT | GEOBLOCK | JSONSUB
+SQUAD_UUID=               # если задан — профиль кладётся в этот внешний сквад,
+                          # а не в глобальные настройки подписки
 EOF
 chmod 600 /etc/letmein-routing.env
 
