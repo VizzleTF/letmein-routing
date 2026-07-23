@@ -75,6 +75,12 @@ jobs:
             echo "geo pins unchanged"
           fi
 
+          # Правили JSON руками — ловим синтаксис до того, как он уедет в диплинк.
+          for f in HAPP/*.JSON INCY/*.JSON; do
+            jq -e 'has("Name") and has("GlobalProxy")' "$f" >/dev/null \
+              || { echo "::error::$f — битый JSON или нет обязательных полей"; exit 1; }
+          done
+
           for f in DEFAULT GEOBLOCK JSONSUB; do
             printf 'happ://routing/onadd/%s\n' "$(jq -c . "HAPP/$f.JSON" | base64 -w 0)" > "HAPP/$f.DEEPLINK"
             printf 'incy://routing/onadd/%s\n' "$(jq -c . "INCY/$f.JSON" | base64 -w 0)" > "INCY/$f.DEEPLINK"
