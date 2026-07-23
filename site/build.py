@@ -51,6 +51,11 @@ def qr_png(payload: str, name: str) -> str:
 
 
 def main() -> int:
+    if shutil.which(QRENCODE) is None:
+        print(f"::error::{QRENCODE} не найден — поставь qrencode "
+              f"(apt install qrencode) или укажи путь в QRENCODE", file=sys.stderr)
+        return 1
+
     OUT.mkdir(exist_ok=True)
     for d in ("HAPP", "INCY", "MIHOMO"):
         shutil.copytree(ROOT / d, OUT / d, dirs_exist_ok=True)
