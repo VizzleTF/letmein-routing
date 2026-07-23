@@ -18,7 +18,7 @@ ENV_FILE="${ENV_FILE:-/etc/letmein-routing.env}"
 : "${API_TOKEN:?API_TOKEN не задан}"
 : "${SETTINGS_UUID:?SETTINGS_UUID не задан}"
 SQUAD_UUID="${SQUAD_UUID:-}"
-PROFILE="${PROFILE:-DEFAULT}"
+PROFILE="${PROFILE:-OUT}"   # OUT | IN | IN-GEOBLOCK | JSONSUB
 RAW="https://raw.githubusercontent.com/VizzleTF/letmein-routing/main/HAPP/${PROFILE}.DEEPLINK"
 
 log() { printf '%s %s\n' "$(date '+%F %T')" "$*"; }

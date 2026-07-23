@@ -56,8 +56,8 @@ jobs:
 
           # Пин, который стоит сейчас. Если не изменился — LastUpdated не трогаем:
           # Happ перекачивает базы только когда он вырос, дёргать клиентов зря не нужно.
-          current_geoip="$(jq -r '.Geoipurl' HAPP/DEFAULT.JSON)"
-          current_geosite="$(jq -r '.Geositeurl' HAPP/DEFAULT.JSON)"
+          current_geoip="$(jq -r '.Geoipurl' HAPP/IN.JSON)"
+          current_geosite="$(jq -r '.Geositeurl' HAPP/IN.JSON)"
 
           if [[ "$current_geoip" != "$geoip_url" || "$current_geosite" != "$geosite_url" ]]; then
             echo "geo pins changed -> geoip=$geoip_tag geosite=$geosite_tag"
@@ -81,7 +81,7 @@ jobs:
               || { echo "::error::$f — битый JSON или нет обязательных полей"; exit 1; }
           done
 
-          for f in DEFAULT GEOBLOCK JSONSUB; do
+          for f in IN IN-GEOBLOCK OUT JSONSUB; do
             printf 'happ://routing/onadd/%s\n' "$(jq -c . "HAPP/$f.JSON" | base64 -w 0)" > "HAPP/$f.DEEPLINK"
             printf 'incy://routing/onadd/%s\n' "$(jq -c . "INCY/$f.JSON" | base64 -w 0)" > "INCY/$f.DEEPLINK"
           done

@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LetMeIn — роутинг «снаружи в Россию»</title>
-<meta name="description" content="Готовые профили маршрутизации для Happ, INCY и Mihomo: доступ к российским сервисам, которые режут зарубежные IP.">
+<title>LetMeIn / LetMeOut — routing-профили для Happ, INCY и Mihomo</title>
+<meta name="description" content="Готовые профили маршрутизации: LetMeOut — обход блокировок из России, LetMeIn — доступ к российским сервисам из-за границы.">
 <style>
   :root {
     --bg: #f7f7f5; --fg: #1a1a19; --muted: #6b6b66; --card: #fff;
-    --line: #e3e3de; --accent: #b23a2e; --accent-fg: #fff;
+    --line: #e3e3de; --accent: #b23a2e; --accent-fg: #fff; --in: #2e6fb2;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #16161a; --fg: #e8e8e4; --muted: #9a9a94; --card: #1f1f24;
-      --line: #2e2e34; --accent: #e05a45; --accent-fg: #16161a;
+      --line: #2e2e34; --accent: #e05a45; --accent-fg: #16161a; --in: #6ba3e0;
     }
   }
   * { box-sizing: border-box; }
@@ -21,31 +21,35 @@
     margin: 0; background: var(--bg); color: var(--fg);
     font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
-  .wrap { max-width: 780px; margin: 0 auto; padding: 48px 20px 80px; }
-  header { margin-bottom: 40px; }
+  .wrap { max-width: 800px; margin: 0 auto; padding: 48px 20px 80px; }
+  header { margin-bottom: 36px; }
   h1 { font-size: 2.2rem; line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.02em; }
-  h2 { font-size: 1.3rem; margin: 44px 0 14px; letter-spacing: -0.01em; }
+  h2 { font-size: 1.35rem; margin: 46px 0 6px; letter-spacing: -0.01em; }
+  h2 + .sub { color: var(--muted); margin: 0 0 16px; font-size: 0.96rem; }
   h3 { font-size: 1rem; margin: 0 0 4px; }
   .lead { color: var(--muted); font-size: 1.05rem; margin: 0; }
-  .flip { color: var(--accent); font-weight: 600; }
+  .dir-out { color: var(--accent); font-weight: 600; }
+  .dir-in { color: var(--in); font-weight: 600; }
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: 12px;
     padding: 18px 20px; margin-bottom: 14px;
   }
-  .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .card.out { border-left: 3px solid var(--accent); }
+  .card.in { border-left: 3px solid var(--in); }
   .card p { color: var(--muted); margin: 6px 0 14px; font-size: 0.94rem; }
   .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
   a.btn {
     display: inline-block; background: var(--accent); color: var(--accent-fg);
     text-decoration: none; padding: 9px 16px; border-radius: 8px; font-weight: 600; font-size: 0.94rem;
   }
+  a.btn.blue { background: var(--in); }
   a.btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); font-weight: 500; }
-  .qr { background: #fff; padding: 8px; border-radius: 8px; line-height: 0; }
-  .qr img { width: 116px; height: 116px; display: block; image-rendering: pixelated; }
+  .qr { background: #fff; padding: 8px; border-radius: 8px; line-height: 0; margin-left: auto; }
+  .qr img { width: 112px; height: 112px; display: block; image-rendering: pixelated; }
   details { margin-top: 10px; }
   summary { cursor: pointer; color: var(--muted); font-size: 0.9rem; }
   table { width: 100%; border-collapse: collapse; margin: 8px 0 4px; font-size: 0.94rem; display: block; overflow-x: auto; }
-  th, td { text-align: left; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th, td { text-align: left; padding: 8px 14px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
   th { font-weight: 600; white-space: nowrap; }
   code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.88em; background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; }
   ol { padding-left: 20px; }
@@ -59,59 +63,84 @@
 <div class="wrap">
 
 <header>
-  <h1>LetMeIn</h1>
-  <p class="lead">Маршрутизация <span class="flip">наоборот</span>: интернет напрямую, российские сервисы — через российский узел. Для тех, кто живёт за границей и не может попасть в госуслуги, банк или Кинопоиск, потому что те режут зарубежные IP.</p>
+  <h1>LetMeIn / LetMeOut</h1>
+  <p class="lead">Готовые профили маршрутизации для Happ, INCY и Mihomo — в обе стороны.
+  <span class="dir-out">LetMeOut</span> открывает заблокированное из России.
+  <span class="dir-in">LetMeIn</span> возвращает доступ к российским сервисам тем, кто живёт за границей
+  и упирается в геоблок: госуслуги, банки, Кинопоиск.</p>
 </header>
 
-<p class="warn">Профилю нужен <strong>российский выходной узел</strong> в вашем VPN. Без него смысла нет: правила просто отправят российские домены в туннель, который выходит не в России.</p>
+<h2>🇷🇺 → 🌍 LetMeOut</h2>
+<p class="sub">Вы в России. Всё идёт через туннель, российские сайты — напрямую. Нужен зарубежный узел.</p>
 
-<h2>Happ</h2>
-
-<div class="card">
-  <div class="card-head"><h3>LetMeIn — основной</h3></div>
-  <p>Всё российское (<code>.ru</code>, <code>.рф</code>, <code>.su</code>, списки РФ-доменов и CIDR) идёт через узел. Остальное — напрямую.</p>
+<div class="card out">
   <div class="row">
-    <a class="btn" href="@@HAPP_DEFAULT@@">Установить в Happ</a>
-    <a class="btn ghost" href="HAPP/DEFAULT.JSON">JSON</a>
-    <div class="qr">@@QR_HAPP_DEFAULT@@</div>
+    <div>
+      <h3>LetMeOut</h3>
+      <p>YouTube, Telegram, Discord, GitHub, AI-сервисы, Apple и Microsoft — через туннель.
+      Российские домены и CIDR, игры и торренты — напрямую. Реклама и телеметрия Windows режутся.</p>
+      <div class="row">
+        <a class="btn" href="@@HAPP_OUT@@">Установить в Happ</a>
+        <a class="btn ghost" href="INCY/OUT.DEEPLINK">INCY</a>
+        <a class="btn ghost" href="HAPP/OUT.JSON">JSON</a>
+      </div>
+    </div>
+    <div class="qr">@@QR_HAPP_OUT@@</div>
   </div>
 </div>
 
-<div class="card">
-  <div class="card-head"><h3>LetMeIn Geoblock — экономный</h3></div>
-  <p>Через узел идёт только то, что реально блокирует зарубежные IP: госуслуги, банки, онлайн-кинотеатры, ТВ. Прочие российские сайты открываются напрямую — меньше трафика и задержки.</p>
+<h2>🌍 → 🇷🇺 LetMeIn</h2>
+<p class="sub">Вы за границей. Всё идёт напрямую, российское — через туннель. Нужен российский узел.</p>
+
+<div class="card in">
   <div class="row">
-    <a class="btn" href="@@HAPP_GEOBLOCK@@">Установить в Happ</a>
-    <a class="btn ghost" href="HAPP/GEOBLOCK.JSON">JSON</a>
-    <div class="qr">@@QR_HAPP_GEOBLOCK@@</div>
+    <div>
+      <h3>LetMeIn — основной</h3>
+      <p>Всё российское (<code>.ru</code>, <code>.рф</code>, <code>.su</code>, списки доменов и CIDR,
+      VK и Яндекс на зарубежных доменах) идёт через узел. Остальное — напрямую.</p>
+      <div class="row">
+        <a class="btn blue" href="@@HAPP_IN@@">Установить в Happ</a>
+        <a class="btn ghost" href="INCY/IN.DEEPLINK">INCY</a>
+        <a class="btn ghost" href="HAPP/IN.JSON">JSON</a>
+      </div>
+    </div>
+    <div class="qr">@@QR_HAPP_IN@@</div>
   </div>
 </div>
 
-<div class="card">
-  <div class="card-head"><h3>LetMeIn JSON — минимальный</h3></div>
-  <p>Пустые списки, только DNS и базовые настройки. Для JSON-подписок, где маршрутизация приезжает с сервера.</p>
+<div class="card in">
   <div class="row">
-    <a class="btn" href="@@HAPP_JSONSUB@@">Установить в Happ</a>
+    <div>
+      <h3>LetMeIn Geoblock — экономный</h3>
+      <p>Через узел идёт только то, что реально режет зарубежные IP: госуслуги, банки,
+      онлайн-кинотеатры, ТВ. Прочие российские сайты открываются напрямую — меньше трафика и задержки.</p>
+      <div class="row">
+        <a class="btn blue" href="@@HAPP_IN_GEOBLOCK@@">Установить в Happ</a>
+        <a class="btn ghost" href="INCY/IN-GEOBLOCK.DEEPLINK">INCY</a>
+        <a class="btn ghost" href="HAPP/IN-GEOBLOCK.JSON">JSON</a>
+      </div>
+    </div>
+    <div class="qr">@@QR_HAPP_IN_GEOBLOCK@@</div>
+  </div>
+</div>
+
+<h2>Минимальный</h2>
+<p class="sub">Пустые списки, только DNS и гео-базы — для JSON-подписок, где маршрутизацию задаёт сервер.</p>
+
+<div class="card">
+  <div class="row">
+    <a class="btn ghost" href="@@HAPP_JSONSUB@@">Установить в Happ</a>
+    <a class="btn ghost" href="INCY/JSONSUB.DEEPLINK">INCY</a>
     <a class="btn ghost" href="HAPP/JSONSUB.JSON">JSON</a>
-    <div class="qr">@@QR_HAPP_JSONSUB@@</div>
-  </div>
-</div>
-
-<h2>INCY</h2>
-
-<div class="card">
-  <div class="row">
-    <a class="btn" href="@@INCY_DEFAULT@@">Основной</a>
-    <a class="btn" href="@@INCY_GEOBLOCK@@">Geoblock</a>
-    <a class="btn" href="@@INCY_JSONSUB@@">Минимальный</a>
-    <a class="btn ghost" href="INCY/">Файлы</a>
   </div>
 </div>
 
 <h2>Mihomo / Clash Meta</h2>
 
 <div class="card">
-  <p>Конфиг с теми же правилами: российские домены и CIDR — в группу <code>🇷🇺 РФ</code>, всё прочее <code>DIRECT</code>. Поправьте <code>filter:</code> в группе <code>🇷🇺 РФ Авто</code> под имена своих узлов.</p>
+  <p>Конфиг для направления <strong>снаружи в Россию</strong>: российские домены и CIDR — в группу
+  <code>🇷🇺 РФ</code>, всё прочее <code>DIRECT</code>. Поправьте <code>filter:</code> в группе
+  <code>🇷🇺 РФ Авто</code> под имена своих узлов.</p>
   <div class="row">
     <a class="btn ghost" href="MIHOMO/default.yaml">default.yaml — ручная вставка</a>
     <a class="btn ghost" href="MIHOMO/template_remnawave.yaml">template_remnawave.yaml — для панели</a>
@@ -121,10 +150,12 @@
 <h2>Что куда идёт</h2>
 
 <table>
-  <tr><th>Через узел</th><td>Списки российских доменов и CIDR, зоны <code>.ru</code> / <code>.рф</code> / <code>.su</code>, VK и Яндекс CDN на зарубежных доменах, онлайн-кинотеатры, банки, госуслуги</td></tr>
-  <tr><th>Напрямую</th><td>Весь остальной интернет, локальная сеть, торренты</td></tr>
-  <tr><th>Блокируется</th><td>Телеметрия Windows, рекламные сети</td></tr>
-  <tr><th>DNS</th><td>Российские зоны — Яндекс <code>77.88.8.8</code> через узел (иначе CDN отдаст европейские адреса, а выход будет российский). Остальное — Cloudflare <code>1.1.1.1</code> напрямую</td></tr>
+  <tr><th></th><th>LetMeOut</th><th>LetMeIn</th></tr>
+  <tr><th>по умолчанию</th><td>через туннель</td><td>напрямую</td></tr>
+  <tr><th>через туннель</th><td>YouTube, Telegram, Discord, GitHub, Google Play, Twitch, AI, Apple, Microsoft</td><td>списки РФ-доменов и CIDR, <code>.ru</code> / <code>.рф</code> / <code>.su</code>, VK и Яндекс CDN, кинотеатры, банки, госуслуги</td></tr>
+  <tr><th>напрямую</th><td>РФ-домены и CIDR, игры, торренты</td><td>весь остальной интернет, локальная сеть, торренты</td></tr>
+  <tr><th>блокируется</th><td colspan="2">телеметрия Windows, рекламные сети</td></tr>
+  <tr><th>DNS</th><td>Google <code>8.8.8.8</code> через туннель, Яндекс <code>77.88.8.8</code> напрямую</td><td>Яндекс <code>77.88.8.8</code> через туннель, Cloudflare <code>1.1.1.1</code> напрямую</td></tr>
 </table>
 
 <h2>Как установить</h2>
@@ -132,9 +163,13 @@
 <ol>
   <li>Откройте эту страницу <strong>на устройстве</strong>, где стоит Happ, и нажмите кнопку. С компьютера — отсканируйте QR телефоном.</li>
   <li>Happ скачает гео-базы и включит профиль. Это занимает несколько секунд.</li>
-  <li>Выберите в приложении <strong>российский узел</strong> — он и будет выходом для российских сервисов.</li>
-  <li>Проверка: <code>2ip.ru</code> должен показать российский адрес, а <code>whoer.net</code> — ваш обычный. Зарубежные сайты открываются как раньше.</li>
+  <li>Выберите узел: для <span class="dir-out">LetMeOut</span> — зарубежный, для <span class="dir-in">LetMeIn</span> — российский.</li>
+  <li>Проверка для LetMeIn: <code>2ip.ru</code> показывает российский адрес, а <code>whoer.net</code> — ваш обычный.</li>
 </ol>
+
+<p class="warn">Если подписка отдаётся в формате JSON, приложение работает в ограниченном режиме:
+профиль маршрутизации может быть только один и приходит он от провайдера — вручную переключить
+его не получится. В этом случае профиль вам должен выдать владелец подписки.</p>
 
 <details>
   <summary>Что-то сломалось</summary>
@@ -144,7 +179,7 @@
 <footer>
   Профили пересобираются автоматически при выходе новых гео-баз.
   Исходники и правила: <a href="https://github.com/VizzleTF/letmein-routing">github.com/VizzleTF/letmein-routing</a>.
-  Форк <a href="https://github.com/hydraponique/roscomvpn-routing">roscomvpn-routing</a>, логика развёрнута в обратную сторону.
+  Форк <a href="https://github.com/hydraponique/roscomvpn-routing">roscomvpn-routing</a>.
   Гео-базы: <a href="https://github.com/hydraponique/roscomvpn-geoip">geoip</a>, <a href="https://github.com/hydraponique/roscomvpn-geosite">geosite</a>.
   <br>Обновлено: @@BUILD_DATE@@
 </footer>
@@ -152,4 +187,3 @@
 </div>
 </body>
 </html>
-

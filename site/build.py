@@ -22,11 +22,13 @@ QRENCODE = os.environ.get("QRENCODE", "qrencode")
 
 # маркер -> файл с диплинком
 LINKS = {
-    "HAPP_DEFAULT": "HAPP/DEFAULT.DEEPLINK",
-    "HAPP_GEOBLOCK": "HAPP/GEOBLOCK.DEEPLINK",
+    "HAPP_IN": "HAPP/IN.DEEPLINK",
+    "HAPP_IN_GEOBLOCK": "HAPP/IN-GEOBLOCK.DEEPLINK",
+    "HAPP_OUT": "HAPP/OUT.DEEPLINK",
     "HAPP_JSONSUB": "HAPP/JSONSUB.DEEPLINK",
-    "INCY_DEFAULT": "INCY/DEFAULT.DEEPLINK",
-    "INCY_GEOBLOCK": "INCY/GEOBLOCK.DEEPLINK",
+    "INCY_IN": "INCY/IN.DEEPLINK",
+    "INCY_IN_GEOBLOCK": "INCY/IN-GEOBLOCK.DEEPLINK",
+    "INCY_OUT": "INCY/OUT.DEEPLINK",
     "INCY_JSONSUB": "INCY/JSONSUB.DEEPLINK",
 }
 
@@ -69,8 +71,10 @@ def main() -> int:
             print(f"::error::{rel} = {len(link.encode())} байт, QR не соберётся "
                   f"(лимит {QR_LIMIT}). Сократи списки в JSON.", file=sys.stderr)
             return 1
+        # QR рисуем только для тех профилей, у которых он на странице реально показан.
+        if f"@@QR_{marker}@@" in page:
+            page = page.replace(f"@@QR_{marker}@@", qr_png(link, marker))
         page = page.replace(f"@@{marker}@@", link)
-        page = page.replace(f"@@QR_{marker}@@", qr_png(link, marker))
 
     page = page.replace("@@BUILD_DATE@@", datetime.now(timezone.utc).strftime("%d.%m.%Y"))
 

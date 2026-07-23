@@ -8,7 +8,7 @@ Happ не берёт маршрутизацию из шаблона подпис
 ## Залить профиль
 
 ```bash
-LINK="$(curl -fsSL https://raw.githubusercontent.com/VizzleTF/letmein-routing/main/HAPP/DEFAULT.DEEPLINK | tr -d '\n\r')"
+LINK="$(curl -fsSL https://raw.githubusercontent.com/VizzleTF/letmein-routing/main/HAPP/OUT.DEEPLINK | tr -d '\n\r')"
 
 curl -s -X PATCH "https://<panel>/api/subscription-settings" \
   -H "Authorization: Bearer $REMNAWAVE_API_TOKEN" -H 'Content-Type: application/json' \
@@ -59,7 +59,7 @@ PANEL_URL=https://panel.example.org
 API_TOKEN=<remnawave api token>
 SETTINGS_UUID=<uuid из GET /api/subscription-settings>
 HEALTH_SHORT_UUID=<shortUuid любого активного пользователя>
-PROFILE=DEFAULT           # DEFAULT | GEOBLOCK | JSONSUB
+PROFILE=OUT               # OUT | IN | IN-GEOBLOCK | JSONSUB
 SQUAD_UUID=               # если задан — профиль кладётся в этот внешний сквад,
                           # а не в глобальные настройки подписки
 EOF
