@@ -51,6 +51,16 @@ dns:
     - 1.1.1.1
     - 8.8.8.8
   nameserver-policy:
+    # Реклама и телеметрия гасятся здесь, ДО всего остального: пустой успешный
+    # ответ вместо адреса. Дешевле, чем RULE-SET: правило проверяется на каждом
+    # коннекте, а тут домен просто не резолвится и соединение не открывается.
+    # Идёт первым, иначе рекламные хосты в зоне .ru перехватит РФ-политика ниже.
+    "rule-set:category-ads-all,category-ru-ads,microsoft-ads,ozon-ads,sber-ads,wildberries-ads,x5-ads,hagezi-spy-opporealme,hagezi-spy-winoffice,hagezi-spy-xiaomi":
+      - rcode://success
+    # Довесок: РФ-реклама и телеметрия устройств. Отдельным ключом, чтобы легко
+    # выключалось, если что-то из этого окажется лишним.
+    "rule-set:yandex-ads,vk-ads,avito-ads,samsung-ads,huawei-ads":
+      - rcode://success
     # РФ-зоны резолвим российским DNS ЧЕРЕЗ российский узел. Иначе Яндекс/VK/CDN
     # отдадут европейские edge-адреса, а выходить мы будем с РФ-IP — рассинхрон
     # геолокации, на этом ломается часть сервисов.
@@ -231,12 +241,119 @@ rule-providers:
     url: https://raw.githubusercontent.com/hydraponique/roscomvpn-geosite/release/mihomo/win-spy.mrs
     path: ./ruleset/win-spy.mrs
     interval: 86400
-  category-ads:
+
+  # --- Реклама и телеметрия, гасятся на DNS (см. nameserver-policy) ---
+  # Списки крошечные: все десять вместе ~66 КБ. mrs — сжатый trie, поэтому
+  # category-ads-all весит 8 КБ, а adblock-списки «в лоб» — по 1.8 МБ.
+  # В URL geosite-атрибут `@` кодируется как %40.
+  category-ads-all:
     type: http
     behavior: domain
     format: mrs
-    url: https://raw.githubusercontent.com/hydraponique/roscomvpn-geosite/release/mihomo/category-ads.mrs
-    path: ./ruleset/category-ads.mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/category-ads-all.mrs
+    path: ./ruleset/category-ads-all.mrs
+    interval: 86400
+  category-ru-ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/category-ru%40ads.mrs
+    path: ./ruleset/category-ru-ads.mrs
+    interval: 86400
+  microsoft-ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/microsoft%40ads.mrs
+    path: ./ruleset/microsoft-ads.mrs
+    interval: 86400
+  ozon-ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/ozon%40ads.mrs
+    path: ./ruleset/ozon-ads.mrs
+    interval: 86400
+  sber-ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/sber%40ads.mrs
+    path: ./ruleset/sber-ads.mrs
+    interval: 86400
+  wildberries-ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/wildberries%40ads.mrs
+    path: ./ruleset/wildberries-ads.mrs
+    interval: 86400
+  x5-ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/x5%40ads.mrs
+    path: ./ruleset/x5-ads.mrs
+    interval: 86400
+  # Телеметрия производителей устройств — в общие ad-списки почти не попадает.
+  # У hagezi это plain-text, по домену на строку, отсюда format: text.
+  hagezi-spy-opporealme:
+    type: http
+    behavior: domain
+    format: text
+    url: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/domains/native.oppo-realme.txt
+    path: ./ruleset/hagezi-spy-opporealme.txt
+    interval: 86400
+  hagezi-spy-winoffice:
+    type: http
+    behavior: domain
+    format: text
+    url: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/domains/native.winoffice.txt
+    path: ./ruleset/hagezi-spy-winoffice.txt
+    interval: 86400
+  hagezi-spy-xiaomi:
+    type: http
+    behavior: domain
+    format: text
+    url: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/domains/native.xiaomi.txt
+    path: ./ruleset/hagezi-spy-xiaomi.txt
+    interval: 86400
+  # РФ-специфика, которой нет в category-ads-all (он про глобальные и китайские).
+  # Атрибут @ads курируется так, чтобы резать рекламные поддомены, а не сервис.
+  yandex-ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/yandex%40ads.mrs
+    path: ./ruleset/yandex-ads.mrs
+    interval: 86400
+  vk-ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/vk%40ads.mrs
+    path: ./ruleset/vk-ads.mrs
+    interval: 86400
+  avito-ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/avito%40ads.mrs
+    path: ./ruleset/avito-ads.mrs
+    interval: 86400
+  samsung-ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/samsung%40ads.mrs
+    path: ./ruleset/samsung-ads.mrs
+    interval: 86400
+  huawei-ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/huawei%40ads.mrs
+    path: ./ruleset/huawei-ads.mrs
     interval: 86400
 
 rules:
@@ -252,7 +369,24 @@ rules:
   - RULE-SET,private-domains,DIRECT
   # --- Мусор ---
   - RULE-SET,win-spy,REJECT-DROP
-  - RULE-SET,category-ads,REJECT-DROP
+  # Реклама/телеметрия. Основная линия — DNS (nameserver-policy, rcode://success):
+  # домен не резолвится и соединение не открывается вовсе. Эти правила — подстраховка
+  # для клиентов со своим DoH, которые ходят мимо нашего DNS.
+  - RULE-SET,category-ads-all,REJECT-DROP
+  - RULE-SET,category-ru-ads,REJECT-DROP
+  - RULE-SET,microsoft-ads,REJECT-DROP
+  - RULE-SET,ozon-ads,REJECT-DROP
+  - RULE-SET,sber-ads,REJECT-DROP
+  - RULE-SET,wildberries-ads,REJECT-DROP
+  - RULE-SET,x5-ads,REJECT-DROP
+  - RULE-SET,hagezi-spy-opporealme,REJECT-DROP
+  - RULE-SET,hagezi-spy-winoffice,REJECT-DROP
+  - RULE-SET,hagezi-spy-xiaomi,REJECT-DROP
+  - RULE-SET,yandex-ads,REJECT-DROP
+  - RULE-SET,vk-ads,REJECT-DROP
+  - RULE-SET,avito-ads,REJECT-DROP
+  - RULE-SET,samsung-ads,REJECT-DROP
+  - RULE-SET,huawei-ads,REJECT-DROP
   # Торренты мимо туннеля: чужой датацентр под свой трафик подставлять не надо.
   - RULE-SET,torrent-trackers,DIRECT
   - RULE-SET,torrent-clients,DIRECT
