@@ -114,6 +114,27 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq qrencode
           python3 site/build.py
 
+      # hagezi wildcard lists hold bare base domains; mihomo text lists match a bare
+      # line exactly, so each line gets "+." to also cover subdomains.
+      - name: Publish hagezi lists for mihomo
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _site/rulesets
+          for l in doh native.winoffice native.oppo-realme native.xiaomi native.lgwebos light; do
+            out="_site/rulesets/hagezi-$l.txt"
+            if curl -fsSL --retry 3 -m 60 "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/$l-onlydomains.txt" -o raw.txt \
+               && (( $(grep -vc '^#' raw.txt) > 50 )); then
+              grep -v -e '^#' -e '^$' raw.txt | sed 's/^/+./' > "$out"
+            else
+              # Upstream down: republish the current copy so routers keep their list.
+              echo "::warning::hagezi $l unavailable, republishing the live copy"
+              curl -fsSL --retry 3 -m 60 "https://vizzletf.github.io/letmein-routing/rulesets/hagezi-$l.txt" -o "$out"
+            fi
+            echo "$l: $(wc -l < "$out") domains"
+          done
+          rm -f raw.txt
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
