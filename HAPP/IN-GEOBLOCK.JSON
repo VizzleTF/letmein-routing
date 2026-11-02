@@ -26,7 +26,6 @@
     "geoip:private"
   ],
   "ProxySites": [
-    "geosite:category-geoblock-ru",
     "domain:gosuslugi.ru",
     "domain:gov.ru",
     "domain:nalog.ru",

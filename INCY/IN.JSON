@@ -27,7 +27,6 @@
   ],
   "ProxySites": [
     "geosite:category-ru",
-    "geosite:category-geoblock-ru",
     "domain:ru",
     "domain:xn--p1ai",
     "domain:su",
