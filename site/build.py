@@ -32,7 +32,7 @@ LINKS = {
     "INCY_JSONSUB": "INCY/JSONSUB.DEEPLINK",
 }
 
-# Больше 2953 байт в QR (уровень L, бинарный режим) не влезает физически.
+# Больше 2953 байт в QR (уровень L, бинарный режим) не влезает физически; qrencode вызывается с -l L, у M предел 2331.
 QR_LIMIT = 2953
 
 
@@ -46,7 +46,7 @@ def qr_png(payload: str, name: str) -> str:
     qrdir.mkdir(exist_ok=True)
     rel = f"qr/{name.lower().replace('_', '-')}.png"
     subprocess.run(
-        [QRENCODE, "-t", "PNG", "-s", "4", "-m", "1", "-l", "M", "-o", str(OUT / rel), payload],
+        [QRENCODE, "-t", "PNG", "-s", "4", "-m", "1", "-l", "L", "-o", str(OUT / rel), payload],
         check=True, capture_output=True,
     )
     return f'<img src="{rel}" alt="QR" width="232" height="232" loading="lazy">' 
