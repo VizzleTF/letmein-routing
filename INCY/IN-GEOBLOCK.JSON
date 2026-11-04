@@ -10,9 +10,9 @@
   "DomesticDNSType": "DoH",
   "DomesticDNSDomain": "https://1.1.1.1/dns-query",
   "DomesticDNSIP": "1.1.1.1",
-  "Geoipurl": "https://cdn.jsdelivr.net/gh/hydraponique/roscomvpn-geoip@202611031046/release/geoip.dat",
+  "Geoipurl": "https://cdn.jsdelivr.net/gh/hydraponique/roscomvpn-geoip@202611041049/release/geoip.dat",
   "Geositeurl": "https://cdn.jsdelivr.net/gh/hydraponique/roscomvpn-geosite@202610120948/release/geosite.dat",
-  "LastUpdated": "1793716732",
+  "LastUpdated": "1793803934",
   "DnsHosts": {
     "lkfl2.nalog.ru": "213.24.64.175",
     "lknpd.nalog.ru": "213.24.64.181"
